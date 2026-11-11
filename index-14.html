@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Otaku Drop: Discord servers for anime fans</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Maru+Gothic:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#F6F3FF; --ink:#1E1B4B; --panel:#FFFFFF; --muted:#58558C; --dark:#1E1B4B;
+  --pink:#FF5C8A; --sun:#FFD23F; --mint:#5EEAD4; --sky:#7DB7FF; --lilac:#C4A8FF; --amber:#FFA55C;
+  --display:"Dela Gothic One","Hiragino Sans","Yu Gothic",system-ui,sans-serif;
+  --body:"Zen Maru Gothic","Hiragino Maru Gothic ProN","Yu Gothic",system-ui,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){color-scheme:dark;--bg:#15132E;--ink:#F1EEFF;--panel:#211E45;--muted:#A9A5D6}
+}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#15132E;--ink:#F1EEFF;--panel:#211E45;--muted:#A9A5D6}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:500 17px/1.55 var(--body)}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+:focus-visible{outline:3px solid var(--pink);outline-offset:3px}
+button,input,select,textarea{font:inherit;color:inherit}
+
+header{display:flex;align-items:center;justify-content:space-between;padding:20px 0}
+.mark{display:flex;align-items:center;gap:10px;font:400 22px/1 var(--display)}
+.drop{width:26px;height:26px;background:var(--pink);border:3px solid var(--ink);border-radius:50% 50% 50% 0;transform:rotate(-45deg)}
+.btn{cursor:pointer;border:3px solid var(--ink);background:var(--sun);color:var(--dark);font-weight:700;padding:9px 18px;border-radius:999px;box-shadow:3px 3px 0 var(--ink);transition:transform .1s,box-shadow .1s}
+.btn:hover{transform:translate(1px,1px);box-shadow:2px 2px 0 var(--ink)}
+.btn:active{transform:translate(3px,3px);box-shadow:0 0 0 var(--ink)}
+
+.hero{padding:28px 0 12px}
+h1{font:400 clamp(38px,8.5vw,84px)/1.02 var(--display);margin:0 0 22px;max-width:14ch;letter-spacing:-.01em}
+.lead{max-width:46ch;color:var(--muted);margin:0 0 26px}
+
+.bubble{position:relative;display:block;background:var(--panel);border:3px solid var(--ink);border-radius:28px;box-shadow:6px 6px 0 var(--ink);padding:6px 22px;margin-bottom:28px}
+.bubble::after{content:"";position:absolute;left:36px;bottom:-17px;width:22px;height:22px;background:var(--panel);border-right:3px solid var(--ink);border-bottom:3px solid var(--ink);transform:rotate(45deg) skew(8deg,8deg)}
+.bubble input{width:100%;border:0;background:transparent;font-size:clamp(18px,3.4vw,26px);padding:14px 0;outline:0}
+.bubble:focus-within{box-shadow:6px 6px 0 var(--pink)}
+.bubble input::placeholder{color:var(--muted)}
+
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:34px 0 8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;flex:1}
+.chip{cursor:pointer;background:transparent;border:2.5px solid var(--ink);border-radius:999px;padding:5px 14px;font-weight:700}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.sort{display:flex;align-items:center;gap:8px;color:var(--muted)}
+select{background:var(--panel);border:2.5px solid var(--ink);border-radius:10px;padding:6px 10px}
+.count{margin:14px 0 18px;color:var(--muted)}
+
+.grid{display:grid;gap:26px;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));padding-bottom:70px}
+.card{display:flex;flex-direction:column;gap:12px;background:var(--panel);border:3px solid var(--ink);border-radius:8px;box-shadow:6px 6px 0 var(--ink);padding:18px}
+.top{display:flex;gap:14px;align-items:center}
+.av{flex:none;width:56px;height:56px;display:grid;place-items:center;border:3px solid var(--ink);border-radius:50% 50% 50% 8px;font:400 22px/1 var(--display);color:var(--dark)}
+.card h2{font:400 19px/1.2 var(--display);margin:0 0 6px;overflow-wrap:anywhere}
+.tag{display:inline-block;border:2px solid var(--ink);border-radius:999px;padding:0 10px;font-size:14px;font-weight:700;color:var(--dark)}
+.card p{margin:0;color:var(--muted);flex:1;font-size:16px}
+.foot{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.foot strong{font-weight:700}
+.join{text-decoration:none;font-size:16px;padding:6px 16px;display:inline-block}
+.empty{grid-column:1/-1;border:3px dashed var(--ink);border-radius:8px;padding:34px 22px;text-align:center}
+.empty p{margin:0 0 14px}
+
+dialog{width:min(480px,calc(100% - 28px));max-height:calc(100% - 28px);overflow:auto;background:var(--panel);color:var(--ink);border:3px solid var(--ink);border-radius:10px;box-shadow:8px 8px 0 var(--pink);padding:24px}
+dialog::backdrop{background:rgba(20,18,50,.6)}
+dialog h2{font:400 24px/1.2 var(--display);margin:0 0 6px}
+.note{color:var(--muted);font-size:15px;margin:0 0 16px}
+label{display:block;font-weight:700;margin:12px 0 4px}
+input[type=text],input[type=url],input[type=number],textarea,dialog select{width:100%;background:var(--bg);border:2.5px solid var(--ink);border-radius:8px;padding:9px 12px}
+textarea{resize:vertical;min-height:80px}
+.err{color:#D6244F;font-weight:700;min-height:1.4em;margin:8px 0 0}
+:root[data-theme="dark"] .err{color:#FF8CA9}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .err{color:#FF8CA9}}
+.row{display:flex;gap:10px;justify-content:flex-end;margin-top:14px}
+.ghost{background:transparent;color:var(--ink)}
+.toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);opacity:0;pointer-events:none;background:var(--ink);color:var(--bg);padding:10px 20px;border-radius:999px;font-weight:700;transition:.25s}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="mark"><span class="drop" aria-hidden="true"></span>Otaku Drop</div>
+    <button class="btn" id="open">Add your server</button>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>Find a Discord server for your fandom</h1>
+      <p class="lead">Browse anime, manga, cosplay and gaming communities. Search by name or topic, then join with one click.</p>
+      <label class="bubble">
+        <span class="sr" style="position:absolute;left:-9999px">Search servers</span>
+        <input id="q" type="search" placeholder="Try “Jujutsu”, “cosplay” or “fanart”" autocomplete="off">
+      </label>
+    </section>
+
+    <div class="bar">
+      <div class="chips" id="chips" role="group" aria-label="Filter by category"></div>
+      <div class="sort"><label for="sort" style="margin:0;font-weight:500">Sort by</label>
+        <select id="sort"><option value="bump">Recently bumped</option><option value="members">Most members</option><option value="new">Newest</option><option value="name">Name</option></select>
+      </div>
+    </div>
+    <div class="count" id="count" aria-live="polite"></div>
+    <div class="grid" id="grid"></div>
+  </main>
+</div>
+
+<dialog id="dlg">
+  <form id="form" novalidate>
+    <h2>Add your server</h2>
+    <p class="note">We read the server name and member count from Discord. After you add it, add the Otaku Drop bot and run /bump (needs Manage Server) to go live. Type /help in your server for all commands. No links in the description, and age-restricted servers can’t be listed.</p>
+    <label for="f-invite">Permanent invite link</label>
+    <input type="url" id="f-invite" placeholder="https://discord.gg/yourcode" required>
+    <label for="f-cat">Category</label>
+    <select id="f-cat"></select>
+    <label for="f-desc">Description</label>
+    <textarea id="f-desc" maxlength="160" required></textarea>
+    <p class="err" id="err" role="alert"></p>
+    <div class="row">
+      <button type="button" class="btn ghost" id="cancel">Cancel</button>
+      <button type="submit" class="btn" id="submit">Add server</button>
+    </div>
+  </form>
+</dialog>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+var CATS={
+  "Anime chat":"var(--pink)","Manga":"var(--sun)","Gaming":"var(--mint)","Cosplay":"var(--sky)",
+  "Fanart":"var(--lilac)","Music and AMV":"var(--amber)","Japanese practice":"var(--mint)"
+};
+var servers=[
+  {name:"Shonen Showdown",cat:"Anime chat",members:18400,desc:"Weekly episode threads and power-scaling debates for battle anime. Spoiler channels are strictly sorted.",t:10},
+  {name:"Panel by Panel",cat:"Manga",members:9200,desc:"Read-alongs, chapter discussions and recommendations for new and classic manga series.",t:9},
+  {name:"Gacha Garden",cat:"Gaming",members:26700,desc:"Banner news, team building and pull-day celebrations for gacha and JRPG players.",t:8},
+  {name:"Wig and Thread",cat:"Cosplay",members:4300,desc:"Share builds, ask sewing and wig-styling questions, and plan convention meetups.",t:7},
+  {name:"Ink Cafe",cat:"Fanart",members:6100,desc:"Post your fanart, get friendly critique, and join monthly drawing prompts.",t:6},
+  {name:"Opening Theme",cat:"Music and AMV",members:3500,desc:"Anime openings, J-pop, city pop and AMV editing help from beginners to pros.",t:5},
+  {name:"Nihongo Notebook",cat:"Japanese practice",members:7800,desc:"Study anime and manga raw text together. Beginner-friendly voice rooms every evening.",t:4},
+  {name:"Slice of Life Lounge",cat:"Anime chat",members:2900,desc:"A calm corner for cozy shows, comfy chat and seasonal watch parties.",t:3},
+  {name:"Seinen Shelf",cat:"Manga",members:1700,desc:"Dark, mature and slow-burn manga picks with thoughtful discussion.",t:2},
+  {name:"Fighting Game Dojo",cat:"Gaming",members:5400,desc:"Anime fighters, frame data and online matchmaking with friendly rivals.",t:1}
+];
+var state={q:"",cat:"All",sort:"bump"};
+var $=function(i){return document.getElementById(i)};
+
+function fmt(n){return n>=1000?(n/1000).toFixed(1).replace(/\.0$/,"")+"k":String(n)}
+function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
+function initials(n){return n.split(/\s+/).slice(0,2).map(function(w){return w.charAt(0)}).join("").toUpperCase()}
+
+function buildChips(){
+  var box=$("chips");box.textContent="";
+  ["All"].concat(Object.keys(CATS)).forEach(function(c){
+    var b=el("button","chip",c);b.type="button";b.setAttribute("aria-pressed",String(state.cat===c));
+    b.onclick=function(){state.cat=c;buildChips();render()};box.appendChild(b);
+  });
+}
+
+function render(){
+  var q=state.q.trim().toLowerCase();
+  var list=servers.filter(function(s){
+    return (state.cat==="All"||s.cat===state.cat)&&(!q||(s.name+" "+s.desc+" "+s.cat).toLowerCase().indexOf(q)>-1);
+  });
+  list.sort(function(a,b){
+    if(state.sort==="members")return b.members-a.members;
+    if(state.sort==="bump")return b.t-a.t;
+    if(state.sort==="new")return (b.added||b.t)-(a.added||a.t);
+    return a.name.localeCompare(b.name);
+  });
+  var g=$("grid");g.textContent="";
+  $("count").textContent=list.length+(list.length===1?" server":" servers");
+  if(!list.length){
+    var e=el("div","empty");e.appendChild(el("p",null,"No servers match your search. Clear the filters or add yours."));
+    var b=el("button","btn","Clear filters");b.onclick=function(){state.q="";state.cat="All";$("q").value="";buildChips();render()};
+    e.appendChild(b);g.appendChild(e);return;
+  }
+  list.forEach(function(s){
+    var c=el("article","card"),top=el("div","top"),av=el("div","av",initials(s.name));
+    av.style.background=CATS[s.cat];av.setAttribute("aria-hidden","true");
+    if(s.icon){av.textContent="";var im=new Image();im.src=s.icon;im.alt="";im.width=50;im.height=50;im.style.borderRadius="inherit";av.appendChild(im)}
+    var info=el("div"),h=el("h2",null,s.name),tag=el("span","tag",s.cat);tag.style.background=CATS[s.cat];
+    info.appendChild(h);info.appendChild(tag);top.appendChild(av);top.appendChild(info);
+    var foot=el("div","foot"),m=el("span");m.appendChild(el("strong",null,s.members?fmt(s.members):"New"));
+    if(s.members)m.appendChild(document.createTextNode(" members"));
+    var j=el("a","btn join","Join server");j.href=s.invite||"#";
+    if(s.invite){j.target="_blank";j.rel="noopener noreferrer"}else{j.onclick=function(ev){ev.preventDefault();toast("Sample listing: no invite attached")}}
+    foot.appendChild(m);foot.appendChild(j);
+    c.appendChild(top);c.appendChild(el("p",null,s.desc));c.appendChild(foot);g.appendChild(c);
+  });
+}
+
+var tt;function toast(msg){var t=$("toast");t.textContent=msg;t.classList.add("on");clearTimeout(tt);tt=setTimeout(function(){t.classList.remove("on")},2400)}
+
+$("q").oninput=function(e){state.q=e.target.value;render()};
+$("sort").onchange=function(e){state.sort=e.target.value;render()};
+Object.keys(CATS).forEach(function(c){var o=el("option",null,c);o.value=c;$("f-cat").appendChild(o)});
+$("open").onclick=function(){$("err").textContent="";$("dlg").showModal()};
+$("cancel").onclick=function(){$("dlg").close()};
+// Paste your Worker URL here, with no trailing slash. Leave empty to preview with sample servers.
+var API_URL="";
+
+$("form").onsubmit=function(ev){
+  ev.preventDefault();
+  var inv=$("f-invite").value.trim(),desc=$("f-desc").value.trim();
+  if(!desc){$("err").textContent="Enter a description.";return}
+  if(!/^https:\/\/(discord\.gg\/|discord\.com\/invite\/)[\w-]+$/i.test(inv)){$("err").textContent="Use a Discord invite link, like https://discord.gg/yourcode.";return}
+  if(!API_URL){$("err").textContent="Set API_URL in this page to save listings.";return}
+  var btn=$("submit");btn.disabled=true;
+  fetch(API_URL+"/api/submit",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({invite:inv,category:$("f-cat").value,description:desc})})
+  .then(function(r){return r.json().then(function(d){return{ok:r.ok,d:d}})})
+  .then(function(x){
+    btn.disabled=false;
+    if(!x.ok){$("err").textContent=x.d.error||"Couldn’t add the server. Try again.";return}
+    $("form").reset();$("dlg").close();
+    toast("Server added. Run /bump in your server to go live.");
+  }).catch(function(){btn.disabled=false;$("err").textContent="Couldn’t reach the server. Try again."});
+};
+
+function load(){
+  if(!API_URL){render();return}
+  $("count").textContent="Loading servers…";
+  fetch(API_URL+"/api/servers").then(function(r){return r.json()}).then(function(d){
+    servers=d.servers.map(function(s){return{name:s.name,cat:s.category,members:s.members,desc:s.description,invite:s.invite,icon:s.icon,t:s.lastBump,added:s.added}});
+    render();
+  }).catch(function(){$("count").textContent="Couldn’t load servers. Refresh to try again."});
+}
+
+buildChips();load();
+</script>
+</body>
+</html>
